@@ -7,10 +7,7 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 
 app.use(cors({
-  origin: [
-    "https://controle-caixa-delta.vercel.app",
-    "https://controle-caixa-9rtsyhw9q-josedebilsonborges-projects.vercel.app"
-  ]
+  origin: "*"
 }));
 app.use(express.json());
 
