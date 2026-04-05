@@ -172,6 +172,7 @@
   </div>
 
   <script>
+    const API_URL = "https://controle-caixa-bd9p.onrender.com";
     const lista = document.getElementById("pedidos");
 
     function classeStatus(status) {
@@ -183,7 +184,7 @@
 
     async function carregarPedidos() {
       try {
-        const resposta = await fetch("http://localhost:3000/pedidos");
+        const resposta = await fetch(`${API_URL}/pedidos`);
         const pedidos = await resposta.json();
 
         lista.innerHTML = "";
@@ -229,7 +230,7 @@
 
     async function mudarStatus(id, status) {
       try {
-        const resposta = await fetch(`http://localhost:3000/pedidos/${id}/status`, {
+        const resposta = await fetch(`${API_URL}/pedidos/${id}/status`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json"

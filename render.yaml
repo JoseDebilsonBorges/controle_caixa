@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: sistema-caixa-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node backend/src/server.js
