@@ -184,7 +184,15 @@
 
     async function carregarPedidos() {
       try {
-        const resposta = await fetch(`${API_URL}/pedidos`);
+        const resposta = await fetch(`${API_URL}/pedidos`, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar pedidos");
+        }
+
         const pedidos = await resposta.json();
 
         lista.innerHTML = "";
@@ -224,7 +232,7 @@
         });
       } catch (erro) {
         lista.innerHTML = '<p class="vazio">Erro ao carregar pedidos.</p>';
-        console.error(erro);
+        console.error("Erro em carregarPedidos:", erro);
       }
     }
 
@@ -235,7 +243,8 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ status })
+          body: JSON.stringify({ status }),
+          cache: "no-store"
         });
 
         const dados = await resposta.json();
@@ -248,11 +257,11 @@
         carregarPedidos();
       } catch (erro) {
         alert("Erro ao atualizar status.");
-        console.error(erro);
+        console.error("Erro em mudarStatus:", erro);
       }
     }
 
-    setInterval(carregarPedidos, 2000);
+    setInterval(carregarPedidos, 4000);
     carregarPedidos();
   </script>
 </body>
