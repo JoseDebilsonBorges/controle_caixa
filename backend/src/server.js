@@ -113,6 +113,29 @@ app.delete("/pedidos/:id", async (req, res) => {
   res.json({ sucesso: true });
 });
 
+app.put("/pedidos/:id/pagamento", async (req, res) => {
+  const { id } = req.params;
+  const { forma_pagamento } = req.body;
+
+  if (!forma_pagamento) {
+    return res.status(400).json({ erro: "Forma de pagamento não informada." });
+  }
+
+  const { data, error } = await supabase
+    .from("pedidos")
+    .update({ forma_pagamento })
+    .eq("id", id)
+    .select();
+
+  if (error) return res.status(500).json({ erro: error.message });
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ erro: "Pedido não encontrado." });
+  }
+
+  res.json(data[0]);
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
