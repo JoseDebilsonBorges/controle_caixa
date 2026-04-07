@@ -15,7 +15,61 @@
     body {
       background: #0f172a;
       color: #f8fafc;
-      padding: 20px;
+    }
+
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      border-right: 1px solid #334155;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #22c55e;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.ativo {
+      background: #16a34a;
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 24px;
     }
 
     .container {
@@ -169,7 +223,30 @@
       font-weight: bold;
     }
 
+    @media (max-width: 900px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
     @media (max-width: 768px) {
+      .content {
+        padding: 15px;
+      }
+
       .resumo h2 {
         font-size: 38px;
       }
@@ -185,63 +262,78 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topo">
-      <div>
-        <h1>Fechamento de Caixa 📊</h1>
-        <p>Resumo geral das vendas realizadas</p>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo">Caixa<span>Web</span></div>
+
+      <nav class="menu">
+        <a href="/">Caixa</a>
+        <a href="/cozinha.html">Cozinha</a>
+        <a href="/dashboard.html" class="ativo">Dashboard</a>
+        <a href="/pendentes.html">Pendentes</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="container">
+        <div class="topo">
+          <div>
+            <h1>Fechamento de Caixa 📊</h1>
+            <p>Resumo geral das vendas realizadas</p>
+          </div>
+
+          <div class="acoes">
+            <a class="btn btn-blue" href="/">Voltar para Caixa</a>
+            <button class="btn btn-green" onclick="window.print()">Exportar / Imprimir</button>
+          </div>
+        </div>
+
+        <div class="resumo">
+          <small>Total Vendido</small>
+          <h2 id="totalVendido">R$ 0,00</h2>
+
+          <div class="linha-info">
+            <span>Recebido: <span class="recebido" id="totalRecebido">R$ 0,00</span></span>
+            <span>Em aberto: <span class="aberto" id="totalAberto">R$ 0,00</span></span>
+          </div>
+
+          <p class="total-pedidos" id="quantidadePedidos">0 vendas realizadas</p>
+          <p class="erro" id="mensagemErro"></p>
+        </div>
+
+        <div class="cards">
+          <div class="card pix">
+            <h3>Pix</h3>
+            <div class="valor" id="valorPix">R$ 0,00</div>
+            <p>Recebido</p>
+          </div>
+
+          <div class="card dinheiro">
+            <h3>Dinheiro</h3>
+            <div class="valor" id="valorDinheiro">R$ 0,00</div>
+            <p>Recebido</p>
+          </div>
+
+          <div class="card credito">
+            <h3>Crédito</h3>
+            <div class="valor" id="valorCredito">R$ 0,00</div>
+            <p>Recebido</p>
+          </div>
+
+          <div class="card debito">
+            <h3>Débito</h3>
+            <div class="valor" id="valorDebito">R$ 0,00</div>
+            <p>Recebido</p>
+          </div>
+
+          <div class="card fiado">
+            <h3>Pendente / Fiado</h3>
+            <div class="valor" id="valorFiado">R$ 0,00</div>
+            <p>Em aberto</p>
+          </div>
+        </div>
       </div>
-
-      <div class="acoes">
-        <a class="btn btn-blue" href="/">Voltar para Caixa</a>
-        <button class="btn btn-green" onclick="window.print()">Exportar / Imprimir</button>
-      </div>
-    </div>
-
-    <div class="resumo">
-      <small>Total Vendido</small>
-      <h2 id="totalVendido">R$ 0,00</h2>
-
-      <div class="linha-info">
-        <span>Recebido: <span class="recebido" id="totalRecebido">R$ 0,00</span></span>
-        <span>Em aberto: <span class="aberto" id="totalAberto">R$ 0,00</span></span>
-      </div>
-
-      <p class="total-pedidos" id="quantidadePedidos">0 vendas realizadas</p>
-      <p class="erro" id="mensagemErro"></p>
-    </div>
-
-    <div class="cards">
-      <div class="card pix">
-        <h3>Pix</h3>
-        <div class="valor" id="valorPix">R$ 0,00</div>
-        <p>Recebido</p>
-      </div>
-
-      <div class="card dinheiro">
-        <h3>Dinheiro</h3>
-        <div class="valor" id="valorDinheiro">R$ 0,00</div>
-        <p>Recebido</p>
-      </div>
-
-      <div class="card credito">
-        <h3>Crédito</h3>
-        <div class="valor" id="valorCredito">R$ 0,00</div>
-        <p>Recebido</p>
-      </div>
-
-      <div class="card debito">
-        <h3>Débito</h3>
-        <div class="valor" id="valorDebito">R$ 0,00</div>
-        <p>Recebido</p>
-      </div>
-
-      <div class="card fiado">
-        <h3>Pendente / Fiado</h3>
-        <div class="valor" id="valorFiado">R$ 0,00</div>
-        <p>Em aberto</p>
-      </div>
-    </div>
+    </main>
   </div>
 
   <script>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela da Cozinha</title>
+  <title>Cozinha - Sistema de Caixa</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,9 +13,63 @@
     }
 
     body {
-      background: #f4f7fb;
-      color: #1f2937;
-      padding: 30px;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      border-right: 1px solid #334155;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #f97316;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.ativo {
+      background: #ea580c;
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 24px;
     }
 
     .container {
@@ -42,7 +96,8 @@
     }
 
     .section-card {
-      background: white;
+      background: #111827;
+      border: 1px solid #334155;
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -50,7 +105,7 @@
 
     .section-card h2 {
       margin-bottom: 18px;
-      color: #111827;
+      color: #f8fafc;
     }
 
     .pedidos-grid {
@@ -60,15 +115,15 @@
     }
 
     .pedido-card {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
+      background: #1c1917;
+      border: 1px solid #7c2d12;
       border-radius: 16px;
       padding: 18px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
     }
 
     .pedido-card h3 {
-      color: #9a3412;
+      color: #fdba74;
       margin-bottom: 12px;
       font-size: 20px;
     }
@@ -77,6 +132,7 @@
       margin-bottom: 8px;
       font-size: 14px;
       line-height: 1.4;
+      color: #e5e7eb;
     }
 
     .status {
@@ -143,12 +199,31 @@
     }
 
     .vazio {
-      color: #6b7280;
+      color: #94a3b8;
       font-size: 14px;
     }
 
+    @media (max-width: 900px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
     @media (max-width: 768px) {
-      body {
+      .content {
         padding: 15px;
       }
 
@@ -159,16 +234,31 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topo">
-      <h1>🍳 Tela da Cozinha</h1>
-      <p>Atualização dos pedidos em andamento</p>
-    </div>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo">Caixa<span>Web</span></div>
 
-    <div class="section-card">
-      <h2>Pedidos</h2>
-      <div id="pedidos" class="pedidos-grid"></div>
-    </div>
+      <nav class="menu">
+        <a href="/">Caixa</a>
+        <a href="/cozinha.html" class="ativo">Cozinha</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/pendentes.html">Pendentes</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="container">
+        <div class="topo">
+          <h1>🍳 Tela da Cozinha</h1>
+          <p>Atualização dos pedidos em andamento</p>
+        </div>
+
+        <div class="section-card">
+          <h2>Pedidos</h2>
+          <div id="pedidos" class="pedidos-grid"></div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script>

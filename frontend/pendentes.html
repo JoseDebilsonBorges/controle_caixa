@@ -15,7 +15,61 @@
     body {
       background: #0f172a;
       color: #f8fafc;
-      padding: 20px;
+    }
+
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      border-right: 1px solid #334155;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #ef4444;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.ativo {
+      background: #dc2626;
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 24px;
     }
 
     .container {
@@ -178,7 +232,30 @@
       font-weight: bold;
     }
 
+    @media (max-width: 900px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
     @media (max-width: 768px) {
+      .content {
+        padding: 15px;
+      }
+
       .resumo h2 {
         font-size: 30px;
       }
@@ -186,26 +263,41 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topo">
-      <div>
-        <h1>Pagamentos Pendentes 💰</h1>
-        <p>Controle de clientes que ainda não pagaram</p>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo">Caixa<span>Web</span></div>
+
+      <nav class="menu">
+        <a href="/">Caixa</a>
+        <a href="/cozinha.html">Cozinha</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/pendentes.html" class="ativo">Pendentes</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="container">
+        <div class="topo">
+          <div>
+            <h1>Pagamentos Pendentes 💰</h1>
+            <p>Controle de clientes que ainda não pagaram</p>
+          </div>
+
+          <div class="acoes">
+            <a class="btn btn-blue" href="/">Voltar para Caixa</a>
+            <a class="btn btn-blue" href="/dashboard.html">Ver Dashboard</a>
+          </div>
+        </div>
+
+        <div class="resumo">
+          <h2 id="totalPendente">R$ 0,00</h2>
+          <p id="quantidadePendentes">0 pendência(s) encontrada(s)</p>
+          <p class="erro" id="mensagemErro"></p>
+        </div>
+
+        <div class="cards" id="listaPendentes"></div>
       </div>
-
-      <div class="acoes">
-        <a class="btn btn-blue" href="/">Voltar para Caixa</a>
-        <a class="btn btn-blue" href="/dashboard.html">Ver Dashboard</a>
-      </div>
-    </div>
-
-    <div class="resumo">
-      <h2 id="totalPendente">R$ 0,00</h2>
-      <p id="quantidadePendentes">0 pendência(s) encontrada(s)</p>
-      <p class="erro" id="mensagemErro"></p>
-    </div>
-
-    <div class="cards" id="listaPendentes"></div>
+    </main>
   </div>
 
   <script>

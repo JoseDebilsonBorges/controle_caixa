@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Caixa</title>
+  <title>Caixa - Sistema de Caixa</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,9 +13,63 @@
     }
 
     body {
-      background: #f4f7fb;
-      color: #1f2937;
-      padding: 30px;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      border-right: 1px solid #334155;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #60a5fa;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.ativo {
+      background: #2563eb;
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 24px;
     }
 
     .container {
@@ -43,7 +97,8 @@
 
     .form-card,
     .section-card {
-      background: white;
+      background: #111827;
+      border: 1px solid #334155;
       border-radius: 18px;
       padding: 22px;
       margin-bottom: 25px;
@@ -53,7 +108,7 @@
     .form-card h2,
     .section-card h2 {
       margin-bottom: 18px;
-      color: #111827;
+      color: #f8fafc;
     }
 
     .form-grid {
@@ -67,17 +122,18 @@
     select {
       width: 100%;
       padding: 12px 14px;
-      border: 1px solid #d1d5db;
+      border: 1px solid #475569;
       border-radius: 12px;
       outline: none;
       font-size: 15px;
-      background: #f9fafb;
+      background: #0f172a;
+      color: #f8fafc;
     }
 
     input:focus,
     select:focus {
       border-color: #2563eb;
-      background: white;
+      background: #111827;
     }
 
     .btn {
@@ -88,6 +144,10 @@
       font-weight: bold;
       cursor: pointer;
       transition: 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-primary {
@@ -120,6 +180,13 @@
       background: #4b5563;
     }
 
+    .acoes-topo {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
     .pedidos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -127,15 +194,15 @@
     }
 
     .pedido-card {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
+      background: #0f172a;
+      border: 1px solid #334155;
       border-radius: 16px;
       padding: 18px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
     }
 
     .pedido-card h3 {
-      color: #111827;
+      color: #f8fafc;
       margin-bottom: 12px;
       font-size: 20px;
     }
@@ -144,6 +211,7 @@
       margin-bottom: 8px;
       font-size: 14px;
       line-height: 1.4;
+      color: #cbd5e1;
     }
 
     .status {
@@ -181,12 +249,31 @@
     }
 
     .vazio {
-      color: #6b7280;
+      color: #94a3b8;
       font-size: 14px;
     }
 
+    @media (max-width: 900px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
     @media (max-width: 768px) {
-      body {
+      .content {
         padding: 15px;
       }
 
@@ -197,59 +284,62 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topo">
-      <h1>Sistema de Caixa 💰</h1>
-      <p>Controle de pedidos, comandas e histórico</p>
-    </div>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo">Caixa<span>Web</span></div>
 
-    <div class="form-card">
-      <h2>Novo Pedido</h2>
+      <nav class="menu">
+        <a href="/" class="ativo">Caixa</a>
+        <a href="/cozinha.html">Cozinha</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/pendentes.html">Pendentes</a>
+      </nav>
+    </aside>
 
-      <form id="formPedido">
-        <div class="form-grid">
-          <input type="text" id="cliente" placeholder="Nome do cliente" required>
-          <input type="text" id="item" placeholder="Item pedido" required>
-          <input type="number" id="quantidade" placeholder="Quantidade" required>
-          <input type="number" id="valor" placeholder="Valor unitário" step="0.01" required>
-
-          <select id="formaPagamento" required>
-            <option value="">Selecione a forma de pagamento</option>
-            <option value="Dinheiro">Dinheiro</option>
-            <option value="Pix">Pix</option>
-            <option value="Cartão de Débito">Cartão de Débito</option>
-            <option value="Cartão de Crédito">Cartão de Crédito</option>
-            <option value="Pendente / Fiado">Pendente / Fiado</option>
-          </select>
+    <main class="content">
+      <div class="container">
+        <div class="topo">
+          <h1>Sistema de Caixa 💰</h1>
+          <p>Controle de pedidos, comandas e histórico</p>
         </div>
 
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-  <button type="submit" class="btn btn-primary">Cadastrar pedido</button>
+        <div class="form-card">
+          <h2>Novo Pedido</h2>
 
-  <a href="/cozinha.html">
-    <button type="button" class="btn btn-primary">Ir para Cozinha 🍳</button>
-  </a>
+          <form id="formPedido">
+            <div class="form-grid">
+              <input type="text" id="cliente" placeholder="Nome do cliente" required>
+              <input type="text" id="item" placeholder="Item pedido" required>
+              <input type="number" id="quantidade" placeholder="Quantidade" required>
+              <input type="number" id="valor" placeholder="Valor unitário" step="0.01" required>
 
-  <a href="/dashboard.html">
-    <button type="button" class="btn btn-primary">Ver Dashboard 📊</button>
-  </a>
+              <select id="formaPagamento" required>
+                <option value="">Selecione a forma de pagamento</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Pendente / Fiado">Pendente / Fiado</option>
+              </select>
+            </div>
 
-  <a href="/pendentes.html">
-    <button type="button" class="btn btn-primary">Pagamentos Pendentes 💰</button>
-  </a>
-</div>
-    
-    </div>
+           <div class="acoes-topo">
+              <button type="submit" class="btn btn-primary">Cadastrar pedido</button>
+           </div>
+          </form>
+        </div>
 
-    <div class="section-card">
-      <h2>Pedidos em andamento</h2>
-      <div id="listaPedidosAtivos" class="pedidos-grid"></div>
-    </div>
+        <div class="section-card">
+          <h2>Pedidos em andamento</h2>
+          <div id="listaPedidosAtivos" class="pedidos-grid"></div>
+        </div>
 
-    <div class="section-card">
-      <h2>Histórico de finalizados</h2>
-      <div id="listaPedidosFinalizados" class="pedidos-grid"></div>
-    </div>
+        <div class="section-card">
+          <h2>Histórico de finalizados</h2>
+          <div id="listaPedidosFinalizados" class="pedidos-grid"></div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script>
