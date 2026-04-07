@@ -83,6 +83,33 @@
       background: #15803d;
     }
 
+    .btn-money {
+      background: #059669;
+      color: white;
+    }
+
+    .btn-money:hover {
+      background: #047857;
+    }
+
+    .btn-purple {
+      background: #7c3aed;
+      color: white;
+    }
+
+    .btn-purple:hover {
+      background: #6d28d9;
+    }
+
+    .btn-dark {
+      background: #334155;
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background: #1e293b;
+    }
+
     .resumo {
       background: #111827;
       border: 1px solid #334155;
@@ -174,7 +201,7 @@
 
     <div class="resumo">
       <h2 id="totalPendente">R$ 0,00</h2>
-      <p id="quantidadePendentes">0 pendências encontradas</p>
+      <p id="quantidadePendentes">0 pendência(s) encontrada(s)</p>
       <p class="erro" id="mensagemErro"></p>
     </div>
 
@@ -239,9 +266,10 @@
               <p><strong>Pagamento:</strong> ${pedido.forma_pagamento}</p>
 
               <div class="acoes-card">
-                <button class="btn btn-green" onclick="marcarComoPago(${pedido.id})">
-                  Marcar como pago
-                </button>
+                <button class="btn btn-green" onclick="marcarComoPago(${pedido.id}, 'Pix')">Pix</button>
+                <button class="btn btn-money" onclick="marcarComoPago(${pedido.id}, 'Dinheiro')">Dinheiro</button>
+                <button class="btn btn-purple" onclick="marcarComoPago(${pedido.id}, 'Cartão de Crédito')">Crédito</button>
+                <button class="btn btn-dark" onclick="marcarComoPago(${pedido.id}, 'Cartão de Débito')">Débito</button>
               </div>
             </div>
           `;
@@ -252,25 +280,7 @@
       }
     }
 
-    async function marcarComoPago(id) {
-      const formaPagamento = prompt(
-        "Digite a forma de pagamento recebida:\nPix, Dinheiro, Cartão de Crédito ou Cartão de Débito"
-      );
-
-      if (!formaPagamento) return;
-
-      const formasValidas = [
-        "Pix",
-        "Dinheiro",
-        "Cartão de Crédito",
-        "Cartão de Débito"
-      ];
-
-      if (!formasValidas.includes(formaPagamento)) {
-        alert("Forma de pagamento inválida.");
-        return;
-      }
-
+    async function marcarComoPago(id, formaPagamento) {
       try {
         const resposta = await fetch(`${API_URL}/pedidos/${id}/pagamento`, {
           method: "PUT",
@@ -290,7 +300,7 @@
           return;
         }
 
-        alert("Pagamento atualizado com sucesso.");
+        alert(`Pagamento atualizado para ${formaPagamento}.`);
         carregarPendentes();
       } catch (erro) {
         alert("Erro ao atualizar pagamento.");
