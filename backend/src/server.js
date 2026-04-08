@@ -172,6 +172,46 @@ app.post("/eventos", async (req, res) => {
   res.json(data[0]);
 });
 
+// LISTAR PRODUTOS DE UM EVENTO
+app.get("/eventos/:id/produtos", async (req, res) => {
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from("produtos")
+    .select("*")
+    .eq("evento_id", id)
+    .order("id", { ascending: true });
+
+  if (error) return res.status(500).json({ erro: error.message });
+
+  res.json(data);
+});
+
+// CRIAR PRODUTO DENTRO DO EVENTO
+app.post("/eventos/:id/produtos", async (req, res) => {
+  const { id } = req.params;
+  const { nome, preco } = req.body;
+
+  if (!nome || !preco) {
+    return res.status(400).json({ erro: "Nome e preço do produto são obrigatórios." });
+  }
+
+  const { data, error } = await supabase
+    .from("produtos")
+    .insert([
+      {
+        evento_id: id,
+        nome,
+        preco: Number(preco)
+      }
+    ])
+    .select();
+
+  if (error) return res.status(500).json({ erro: error.message });
+
+  res.json(data[0]);
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
