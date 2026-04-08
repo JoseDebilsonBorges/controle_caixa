@@ -142,7 +142,7 @@
 
     .lista {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: 1fr;
       gap: 18px;
     }
 
@@ -155,11 +155,41 @@
 
     .evento-item h3 {
       margin-bottom: 12px;
+      font-size: 22px;
     }
 
     .evento-item p {
       margin-bottom: 8px;
       color: #cbd5e1;
+    }
+
+    .produto-form {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 10px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    .produto-lista {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .produto-item {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #e2e8f0;
+    }
+
+    .titulo-produtos {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #f8fafc;
     }
 
     .vazio {
@@ -184,6 +214,12 @@
         width: 100%;
       }
     }
+
+    @media (max-width: 700px) {
+      .produto-form {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -204,7 +240,7 @@
       <div class="container">
         <div class="topo">
           <h1>Eventos 📅</h1>
-          <p>Cadastre os eventos da comunidade ou dos clientes</p>
+          <p>Cadastre os eventos e os produtos de cada evento no mesmo lugar</p>
         </div>
 
         <div class="card">
@@ -235,9 +271,33 @@
 
   <script>
     const API_URL = "https://controle-caixa-bd9p.onrender.com";
-
     const formEvento = document.getElementById("formEvento");
     const listaEventos = document.getElementById("listaEventos");
+
+    function formatarMoeda(valor) {
+      return Number(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    async function buscarProdutosDoEvento(eventoId) {
+      try {
+        const resposta = await fetch(`${API_URL}/eventos/${eventoId}/produtos`, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar produtos");
+        }
+
+        return await resposta.json();
+      } catch (erro) {
+        console.error("Erro ao buscar produtos do evento:", erro);
+        return [];
+      }
+    }
 
     async function carregarEventos() {
       try {
@@ -255,18 +315,83 @@
           return;
         }
 
-        eventos.forEach(evento => {
+        for (const evento of eventos) {
+          const produtos = await buscarProdutosDoEvento(evento.id);
+
+          let produtosHtml = '<p class="vazio">Nenhum produto cadastrado ainda.</p>';
+
+          if (produtos.length > 0) {
+            produtosHtml = produtos.map(produto => `
+              <div class="produto-item">
+                <strong>${produto.nome}</strong> — ${formatarMoeda(produto.preco)}
+              </div>
+            `).join("");
+          }
+
           listaEventos.innerHTML += `
             <div class="evento-item">
               <h3>${evento.nome}</h3>
               <p><strong>Data:</strong> ${evento.data_evento}</p>
               <p><strong>Status:</strong> ${evento.status}</p>
+
+              <div class="titulo-produtos">Adicionar produto</div>
+
+              <div class="produto-form">
+                <input type="text" id="produto-nome-${evento.id}" placeholder="Nome do produto">
+                <input type="number" id="produto-preco-${evento.id}" placeholder="Preço" step="0.01">
+                <button class="btn" onclick="adicionarProduto(${evento.id})">Adicionar</button>
+              </div>
+
+              <div class="titulo-produtos">Produtos deste evento</div>
+              <div class="produto-lista">
+                ${produtosHtml}
+              </div>
             </div>
           `;
-        });
+        }
       } catch (erro) {
         listaEventos.innerHTML = '<p class="vazio">Erro ao carregar eventos.</p>';
         console.error("Erro ao carregar eventos:", erro);
+      }
+    }
+
+    async function adicionarProduto(eventoId) {
+      const nomeInput = document.getElementById(`produto-nome-${eventoId}`);
+      const precoInput = document.getElementById(`produto-preco-${eventoId}`);
+
+      const nome = nomeInput.value.trim();
+      const preco = precoInput.value;
+
+      if (!nome || !preco) {
+        alert("Preencha nome e preço do produto.");
+        return;
+      }
+
+      try {
+        const resposta = await fetch(`${API_URL}/eventos/${eventoId}/produtos`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            nome,
+            preco
+          })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          alert(dados.erro || "Erro ao cadastrar produto.");
+          return;
+        }
+
+        nomeInput.value = "";
+        precoInput.value = "";
+        carregarEventos();
+      } catch (erro) {
+        alert("Erro ao conectar com o servidor.");
+        console.error("Erro ao cadastrar produto:", erro);
       }
     }
 
