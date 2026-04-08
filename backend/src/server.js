@@ -136,6 +136,42 @@ app.put("/pedidos/:id/pagamento", async (req, res) => {
   res.json(data[0]);
 });
 
+// LISTAR EVENTOS
+app.get("/eventos", async (req, res) => {
+  const { data, error } = await supabase
+    .from("eventos")
+    .select("*")
+    .order("data_evento", { ascending: true });
+
+  if (error) return res.status(500).json({ erro: error.message });
+
+  res.json(data);
+});
+
+// CRIAR EVENTO
+app.post("/eventos", async (req, res) => {
+  const { nome, data_evento, status } = req.body;
+
+  if (!nome || !data_evento) {
+    return res.status(400).json({ erro: "Nome e data do evento são obrigatórios." });
+  }
+
+  const { data, error } = await supabase
+    .from("eventos")
+    .insert([
+      {
+        nome,
+        data_evento,
+        status: status || "Aberto"
+      }
+    ])
+    .select();
+
+  if (error) return res.status(500).json({ erro: error.message });
+
+  res.json(data[0]);
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });

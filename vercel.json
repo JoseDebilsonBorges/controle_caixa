@@ -3,6 +3,7 @@
     { "source": "/", "destination": "/frontend/index.html" },
     { "source": "/cozinha.html", "destination": "/frontend/cozinha.html" },
     { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
-    { "source": "/pendentes.html", "destination": "/frontend/pendentes.html" }
+    { "source": "/pendentes.html", "destination": "/frontend/pendentes.html" },
+    { "source": "/eventos.html", "destination": "/frontend/eventos.html" }
   ]
 }
