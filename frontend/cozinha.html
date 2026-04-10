@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cozinha - Sistema de Caixa</title>
+  <title>Produção - Sistema de Vendas</title>
   <style>
     * {
       box-sizing: border-box;
@@ -239,23 +239,24 @@
       <div class="logo">Caixa<span>Web</span></div>
 
       <nav class="menu">
-        <a href="/">Caixa</a>
-        <a href="/cozinha.html" class="ativo">Cozinha</a>
+        <a href="/">Venda rápida</a>
+        <a href="/caixa-evento.html">Pedidos</a>
+        <a href="/cozinha.html" class="ativo">Produção</a>
         <a href="/dashboard.html">Dashboard</a>
         <a href="/pendentes.html">Pendentes</a>
-        <a href="/eventos.html">Eventos</a>
+        <a href="/eventos.html">Sessões</a>
       </nav>
     </aside>
 
     <main class="content">
       <div class="container">
         <div class="topo">
-          <h1>🍳 Tela da Cozinha</h1>
-          <p>Atualização dos pedidos em andamento</p>
+          <h1>Produção 🏭</h1>
+          <p>Acompanhe e atualize os pedidos em andamento</p>
         </div>
 
         <div class="section-card">
-          <h2>Pedidos</h2>
+          <h2>Pedidos em andamento</h2>
           <div id="pedidos" class="pedidos-grid"></div>
         </div>
       </div>
@@ -300,7 +301,7 @@
         pedidosEmAndamento.forEach((pedido) => {
           lista.innerHTML += `
             <div class="pedido-card">
-              <h3>Comanda #${pedido.comanda}</h3>
+              <h3>Pedido #${pedido.comanda}</h3>
               <p><strong>Cliente:</strong> ${pedido.cliente}</p>
               <p><strong>Item:</strong> ${pedido.item}</p>
               <p><strong>Quantidade:</strong> ${pedido.quantidade}</p>
@@ -308,7 +309,7 @@
               <p><strong>Status:</strong> <span class="${classeStatus(pedido.status)}">${pedido.status}</span></p>
 
               ${pedido.status === "Pendente"
-                ? `<button class="btn btn-blue" onclick="mudarStatus(${pedido.id}, 'Em preparo')">Iniciar preparo</button>`
+                ? `<button class="btn btn-blue" onclick="mudarStatus(${pedido.id}, 'Em preparo')">Iniciar produção</button>`
                 : ""}
 
               ${pedido.status === "Em preparo"
