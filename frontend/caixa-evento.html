@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos - Sistema de Vendas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      border-right: 1px solid #334155;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #60a5fa;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #e5e7eb;
+      background: #1f2937;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.ativo {
+      background: #2563eb;
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .topo {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      padding: 24px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+    }
+
+    .topo h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .topo p {
+      opacity: 0.95;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .card h2 {
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .itens-lista {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .item-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .acoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .total-box {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 14px;
+      color: #22c55e;
+    }
+
+    .vazio {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo">Caixa<span>Web</span></div>
+
+      <nav class="menu">
+        <a href="/">Venda rápida</a>
+        <a href="/caixa-evento.html" class="ativo">Pedidos</a>
+        <a href="/cozinha.html">Produção</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/pendentes.html">Pendentes</a>
+        <a href="/eventos.html">Sessões</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="container">
+        <div class="topo">
+          <h1>Pedidos 🧾</h1>
+          <p>Selecione uma sessão, escolha os produtos e monte um pedido com vários itens</p>
+        </div>
+
+        <div class="card">
+          <h2>Novo Pedido</h2>
+
+          <div class="grid">
+            <select id="eventoSelect">
+              <option value="">Selecione a sessão</option>
+            </select>
+
+            <input type="text" id="cliente" placeholder="Nome do cliente">
+
+            <select id="formaPagamento">
+              <option value="">Forma de pagamento</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Pendente / Fiado">Pendente / Fiado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Adicionar Item</h2>
+
+          <div class="grid">
+            <select id="produtoSelect">
+              <option value="">Selecione um produto</option>
+            </select>
+
+            <input type="number" id="quantidadeItem" placeholder="Quantidade" min="1">
+          </div>
+
+          <div class="acoes">
+            <button class="btn" onclick="adicionarItem()">Adicionar item</button>
+          </div>
+
+          <div class="itens-lista" id="itensLista"></div>
+          <div class="total-box" id="totalPedido">Total: R$ 0,00</div>
+
+          <div class="acoes">
+            <button class="btn" onclick="finalizarPedido()">Finalizar pedido</button>
+            <button class="btn btn-danger" onclick="limparPedido()">Limpar</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = "https://controle-caixa-bd9p.onrender.com";
+
+    let produtosSessao = [];
+    let itensPedido = [];
+
+    function formatarMoeda(valor) {
+      return Number(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    async function carregarSessoes() {
+      const resposta = await fetch(`${API_URL}/eventos`, { cache: "no-store" });
+      const sessoes = await resposta.json();
+
+      const eventoSelect = document.getElementById("eventoSelect");
+      eventoSelect.innerHTML = '<option value="">Selecione a sessão</option>';
+
+      sessoes.forEach(sessao => {
+        eventoSelect.innerHTML += `<option value="${sessao.id}">${sessao.nome} - ${sessao.data_evento}</option>`;
+      });
+    }
+
+    async function carregarProdutosDaSessao(sessaoId) {
+      const resposta = await fetch(`${API_URL}/eventos/${sessaoId}/produtos`, { cache: "no-store" });
+      const produtos = await resposta.json();
+
+      produtosSessao = produtos;
+
+      const produtoSelect = document.getElementById("produtoSelect");
+      produtoSelect.innerHTML = '<option value="">Selecione um produto</option>';
+
+      produtos.forEach(produto => {
+        produtoSelect.innerHTML += `
+          <option value="${produto.id}">
+            ${produto.nome} - ${formatarMoeda(produto.preco)}
+          </option>
+        `;
+      });
+    }
+
+    document.getElementById("eventoSelect").addEventListener("change", async function() {
+      const sessaoId = this.value;
+      itensPedido = [];
+      renderizarItens();
+
+      if (!sessaoId) {
+        document.getElementById("produtoSelect").innerHTML = '<option value="">Selecione um produto</option>';
+        return;
+      }
+
+      await carregarProdutosDaSessao(sessaoId);
+    });
+
+    function adicionarItem() {
+      const produtoId = Number(document.getElementById("produtoSelect").value);
+      const quantidade = Number(document.getElementById("quantidadeItem").value);
+
+      if (!produtoId || !quantidade || quantidade <= 0) {
+        alert("Selecione um produto e informe a quantidade.");
+        return;
+      }
+
+      const produto = produtosSessao.find(p => Number(p.id) === produtoId);
+
+      if (!produto) {
+        alert("Produto não encontrado.");
+        return;
+      }
+
+      const existente = itensPedido.find(item => Number(item.produto_id) === produtoId);
+
+      if (existente) {
+        existente.quantidade += quantidade;
+      } else {
+        itensPedido.push({
+          produto_id: produto.id,
+          nome: produto.nome,
+          preco: Number(produto.preco),
+          quantidade
+        });
+      }
+
+      document.getElementById("produtoSelect").value = "";
+      document.getElementById("quantidadeItem").value = "";
+      renderizarItens();
+    }
+
+    function removerItem(produtoId) {
+      itensPedido = itensPedido.filter(item => Number(item.produto_id) !== Number(produtoId));
+      renderizarItens();
+    }
+
+    function renderizarItens() {
+      const itensLista = document.getElementById("itensLista");
+      const totalPedido = document.getElementById("totalPedido");
+
+      itensLista.innerHTML = "";
+
+      if (itensPedido.length === 0) {
+        itensLista.innerHTML = '<p class="vazio">Nenhum item adicionado ainda.</p>';
+        totalPedido.textContent = "Total: R$ 0,00";
+        return;
+      }
+
+      let total = 0;
+
+      itensPedido.forEach(item => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+
+        itensLista.innerHTML += `
+          <div class="item-card">
+            <div>
+              <strong>${item.nome}</strong><br>
+              Quantidade: ${item.quantidade}<br>
+              Valor unitário: ${formatarMoeda(item.preco)}<br>
+              Subtotal: ${formatarMoeda(subtotal)}
+            </div>
+
+            <button class="btn btn-danger" onclick="removerItem(${item.produto_id})">Remover</button>
+          </div>
+        `;
+      });
+
+      totalPedido.textContent = `Total: ${formatarMoeda(total)}`;
+    }
+
+    function limparPedido() {
+      itensPedido = [];
+      renderizarItens();
+    }
+
+    async function finalizarPedido() {
+      const evento_id = Number(document.getElementById("eventoSelect").value);
+      const cliente = document.getElementById("cliente").value.trim();
+      const forma_pagamento = document.getElementById("formaPagamento").value;
+
+      if (!evento_id || !cliente || !forma_pagamento || itensPedido.length === 0) {
+        alert("Preencha sessão, cliente, forma de pagamento e adicione itens.");
+        return;
+      }
+
+      try {
+        const resposta = await fetch(`${API_URL}/comandas`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            evento_id,
+            cliente,
+            forma_pagamento,
+            itens: itensPedido.map(item => ({
+              produto_id: item.produto_id,
+              quantidade: item.quantidade
+            }))
+          })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          alert(dados.erro || "Erro ao criar pedido.");
+          return;
+        }
+
+        alert(`Pedido #${dados.numero_comanda} criado com sucesso. Total: ${formatarMoeda(dados.total)}`);
+
+        document.getElementById("cliente").value = "";
+        document.getElementById("formaPagamento").value = "";
+        document.getElementById("produtoSelect").value = "";
+        document.getElementById("quantidadeItem").value = "";
+        itensPedido = [];
+        renderizarItens();
+      } catch (erro) {
+        alert("Erro ao conectar com o servidor.");
+        console.error("Erro em finalizarPedido:", erro);
+      }
+    }
+
+    carregarSessoes();
+    renderizarItens();
+  </script>
+</body>
+</html>

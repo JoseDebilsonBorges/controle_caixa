@@ -212,6 +212,120 @@ app.post("/eventos/:id/produtos", async (req, res) => {
   res.json(data[0]);
 });
 
+// LISTAR COMANDAS COM ITENS
+app.get("/comandas", async (req, res) => {
+  const { data: comandas, error: erroComandas } = await supabase
+    .from("comandas")
+    .select("*")
+    .order("numero_comanda", { ascending: false });
+
+  if (erroComandas) return res.status(500).json({ erro: erroComandas.message });
+
+  const resultado = [];
+
+  for (const comanda of comandas) {
+    const { data: itens, error: erroItens } = await supabase
+      .from("itens_comanda")
+      .select("*, produtos(nome)")
+      .eq("comanda_id", comanda.id);
+
+    if (erroItens) return res.status(500).json({ erro: erroItens.message });
+
+    resultado.push({
+      ...comanda,
+      itens
+    });
+  }
+
+  res.json(resultado);
+});
+
+// CRIAR COMANDA COM VÁRIOS ITENS
+app.post("/comandas", async (req, res) => {
+  const { evento_id, cliente, forma_pagamento, itens } = req.body;
+
+  if (!evento_id || !cliente || !forma_pagamento || !itens || !itens.length) {
+    return res.status(400).json({ erro: "Preencha evento, cliente, pagamento e itens." });
+  }
+
+  const { data: ultima } = await supabase
+    .from("comandas")
+    .select("numero_comanda")
+    .order("numero_comanda", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const novoNumero = ultima ? ultima.numero_comanda + 1 : 1;
+
+  let totalComanda = 0;
+  const itensProntos = [];
+
+  for (const item of itens) {
+    const { produto_id, quantidade } = item;
+
+    const { data: produto, error: erroProduto } = await supabase
+      .from("produtos")
+      .select("*")
+      .eq("id", produto_id)
+      .maybeSingle();
+
+    if (erroProduto || !produto) {
+      return res.status(400).json({ erro: `Produto inválido: ${produto_id}` });
+    }
+
+    const subtotal = Number(produto.preco) * Number(quantidade);
+    totalComanda += subtotal;
+
+    itensProntos.push({
+      produto_id,
+      quantidade: Number(quantidade),
+      preco_unitario: Number(produto.preco),
+      subtotal
+    });
+  }
+
+  const { data: comandaCriada, error: erroComanda } = await supabase
+    .from("comandas")
+    .insert([
+      {
+        numero_comanda: novoNumero,
+        evento_id,
+        cliente,
+        forma_pagamento,
+        status: "Pendente",
+        total: totalComanda
+      }
+    ])
+    .select()
+    .maybeSingle();
+
+  if (erroComanda || !comandaCriada) {
+    return res.status(500).json({ erro: erroComanda?.message || "Erro ao criar comanda." });
+  }
+
+  const itensInsert = itensProntos.map(item => ({
+    comanda_id: comandaCriada.id,
+    produto_id: item.produto_id,
+    quantidade: item.quantidade,
+    preco_unitario: item.preco_unitario,
+    subtotal: item.subtotal
+  }));
+
+  const { error: erroItens } = await supabase
+    .from("itens_comanda")
+    .insert(itensInsert);
+
+  if (erroItens) {
+    return res.status(500).json({ erro: erroItens.message });
+  }
+
+  res.json({
+    sucesso: true,
+    numero_comanda: comandaCriada.numero_comanda,
+    total: comandaCriada.total
+  });
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
