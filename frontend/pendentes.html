@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pendentes - Sistema de Caixa</title>
+  <title>Pendentes - Sistema de Vendas</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -28,8 +29,6 @@
       border-right: 1px solid #334155;
       padding: 24px 18px;
       position: fixed;
-      top: 0;
-      left: 0;
       height: 100vh;
     }
 
@@ -37,11 +36,10 @@
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 30px;
-      color: #ffffff;
     }
 
     .logo span {
-      color: #ef4444;
+      color: #f43f5e;
     }
 
     .menu {
@@ -54,355 +52,126 @@
       text-decoration: none;
       color: #e5e7eb;
       background: #1f2937;
-      padding: 14px 16px;
+      padding: 14px;
       border-radius: 12px;
       font-weight: bold;
-      transition: 0.2s;
     }
 
-    .menu a:hover,
-    .menu a.ativo {
-      background: #dc2626;
+    .menu a.ativo,
+    .menu a:hover {
+      background: #f43f5e;
       color: white;
     }
 
     .content {
       margin-left: 260px;
-      width: calc(100% - 260px);
       padding: 24px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+      width: 100%;
     }
 
     .topo {
-      background: linear-gradient(135deg, #111827, #1f2937);
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+    }
+
+    .lista {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      background: #111827;
+      padding: 15px;
+      border-radius: 14px;
       border: 1px solid #334155;
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .topo h1 {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
-
-    .topo p {
-      color: #cbd5e1;
-    }
-
-    .acoes {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
     }
 
     .btn {
-      text-decoration: none;
+      margin-top: 10px;
+      padding: 10px;
       border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 14px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-blue {
-      background: #2563eb;
-      color: white;
-    }
-
-    .btn-blue:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-green {
-      background: #16a34a;
-      color: white;
-    }
-
-    .btn-green:hover {
-      background: #15803d;
-    }
-
-    .btn-money {
-      background: #059669;
-      color: white;
-    }
-
-    .btn-money:hover {
-      background: #047857;
-    }
-
-    .btn-purple {
-      background: #7c3aed;
-      color: white;
-    }
-
-    .btn-purple:hover {
-      background: #6d28d9;
-    }
-
-    .btn-dark {
-      background: #334155;
-      color: white;
-    }
-
-    .btn-dark:hover {
-      background: #1e293b;
-    }
-
-    .resumo {
-      background: #111827;
-      border: 1px solid #334155;
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .resumo h2 {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-
-    .resumo p {
-      color: #cbd5e1;
-      font-size: 16px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      background: #111827;
-      border: 1px solid #334155;
-      border-left: 5px solid #ef4444;
-      border-radius: 18px;
-      padding: 22px;
-    }
-
-    .card h3 {
-      font-size: 22px;
-      margin-bottom: 14px;
-      color: #e2e8f0;
-    }
-
-    .card p {
-      margin-bottom: 8px;
-      color: #cbd5e1;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .card strong {
-      color: #f8fafc;
-    }
-
-    .acoes-card {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .vazio {
-      color: #cbd5e1;
-      font-size: 16px;
-      margin-top: 12px;
-    }
-
-    .erro {
-      margin-top: 10px;
-      color: #fca5a5;
-      font-weight: bold;
-    }
-
-    @media (max-width: 900px) {
-      .app-layout {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid #334155;
-      }
-
-      .content {
-        margin-left: 0;
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .content {
-        padding: 15px;
-      }
-
-      .resumo h2 {
-        font-size: 30px;
-      }
     }
   </style>
 </head>
+
 <body>
   <div class="app-layout">
+
     <aside class="sidebar">
       <div class="logo">Caixa<span>Web</span></div>
 
       <nav class="menu">
-        <a href="/">Caixa</a>
-        <a href="/cozinha.html">Cozinha</a>
+        <a href="/">Venda rápida</a>
+        <a href="/caixa-evento.html">Pedidos</a>
+        <a href="/cozinha.html">Produção</a>
         <a href="/dashboard.html">Dashboard</a>
         <a href="/pendentes.html" class="ativo">Pendentes</a>
-        <a href="/eventos.html">Eventos</a>
+        <a href="/eventos.html">Sessões</a>
       </nav>
     </aside>
 
     <main class="content">
-      <div class="container">
-        <div class="topo">
-          <div>
-            <h1>Pagamentos Pendentes 💰</h1>
-            <p>Controle de clientes que ainda não pagaram</p>
-          </div>
 
-          <div class="acoes">
-            <a class="btn btn-blue" href="/">Voltar para Caixa</a>
-            <a class="btn btn-blue" href="/dashboard.html">Ver Dashboard</a>
-          </div>
-        </div>
-
-        <div class="resumo">
-          <h2 id="totalPendente">R$ 0,00</h2>
-          <p id="quantidadePendentes">0 pendência(s) encontrada(s)</p>
-          <p class="erro" id="mensagemErro"></p>
-        </div>
-
-        <div class="cards" id="listaPendentes"></div>
+      <div class="topo">
+        <h1>Pendentes 💰</h1>
+        <p>Controle de clientes que ainda não pagaram</p>
       </div>
+
+      <div id="lista" class="lista"></div>
+
     </main>
   </div>
 
-  <script>
-    const API_URL = "https://controle-caixa-bd9p.onrender.com";
+<script>
+const API_URL = "https://controle-caixa-bd9p.onrender.com";
 
-    function formatarMoeda(valor) {
-      return Number(valor).toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-      });
-    }
+async function carregarPendentes() {
+  const res = await fetch(`${API_URL}/pedidos`);
+  const dados = await res.json();
 
-    async function carregarPendentes() {
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos`, {
-          method: "GET",
-          cache: "no-store"
-        });
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
 
-        if (!resposta.ok) {
-          throw new Error("Erro ao buscar pedidos");
-        }
+  const pendentes = dados.filter(p => p.forma_pagamento === "Pendente");
 
-        const pedidos = await resposta.json();
+  if (pendentes.length === 0) {
+    lista.innerHTML = "<p>Nenhum valor pendente</p>";
+    return;
+  }
 
-        const pendentes = pedidos.filter(
-          pedido =>
-            pedido.forma_pagamento === "Pendente / Fiado" &&
-            pedido.status !== "Cancelado"
-        );
+  pendentes.forEach(p => {
+    lista.innerHTML += `
+      <div class="item">
+        <strong>${p.cliente}</strong><br>
+        ${p.item} - R$ ${p.total}
 
-        const totalPendente = pendentes.reduce(
-          (acc, pedido) => acc + Number(pedido.total || 0),
-          0
-        );
+        <button class="btn" onclick="receber(${p.id})">
+          Marcar como pago
+        </button>
+      </div>
+    `;
+  });
+}
 
-        document.getElementById("totalPendente").textContent = formatarMoeda(totalPendente);
-        document.getElementById("quantidadePendentes").textContent = `${pendentes.length} pendência(s) encontrada(s)`;
-        document.getElementById("mensagemErro").textContent = "";
+async function receber(id) {
+  await fetch(`${API_URL}/pedidos/${id}/status`, {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({status: "Pago"})
+  });
 
-        const listaPendentes = document.getElementById("listaPendentes");
-        listaPendentes.innerHTML = "";
+  carregarPendentes();
+}
 
-        if (pendentes.length === 0) {
-          listaPendentes.innerHTML = '<p class="vazio">Nenhum pagamento pendente no momento.</p>';
-          return;
-        }
+carregarPendentes();
+</script>
 
-        pendentes.forEach(pedido => {
-          listaPendentes.innerHTML += `
-            <div class="card">
-              <h3>Comanda #${pedido.comanda}</h3>
-              <p><strong>Cliente:</strong> ${pedido.cliente}</p>
-              <p><strong>Item:</strong> ${pedido.item}</p>
-              <p><strong>Quantidade:</strong> ${pedido.quantidade}</p>
-              <p><strong>Total:</strong> ${formatarMoeda(pedido.total)}</p>
-              <p><strong>Status:</strong> ${pedido.status}</p>
-              <p><strong>Pagamento:</strong> ${pedido.forma_pagamento}</p>
-
-              <div class="acoes-card">
-                <button class="btn btn-green" onclick="marcarComoPago(${pedido.id}, 'Pix')">Pix</button>
-                <button class="btn btn-money" onclick="marcarComoPago(${pedido.id}, 'Dinheiro')">Dinheiro</button>
-                <button class="btn btn-purple" onclick="marcarComoPago(${pedido.id}, 'Cartão de Crédito')">Crédito</button>
-                <button class="btn btn-dark" onclick="marcarComoPago(${pedido.id}, 'Cartão de Débito')">Débito</button>
-              </div>
-            </div>
-          `;
-        });
-      } catch (erro) {
-        document.getElementById("mensagemErro").textContent = "Erro ao carregar pendentes.";
-        console.error("Erro em carregarPendentes:", erro);
-      }
-    }
-
-    async function marcarComoPago(id, formaPagamento) {
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos/${id}/pagamento`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            forma_pagamento: formaPagamento
-          }),
-          cache: "no-store"
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-          alert(dados.erro || "Erro ao atualizar pagamento.");
-          return;
-        }
-
-        alert(`Pagamento atualizado para ${formaPagamento}.`);
-        carregarPendentes();
-      } catch (erro) {
-        alert("Erro ao atualizar pagamento.");
-        console.error("Erro em marcarComoPago:", erro);
-      }
-    }
-
-    carregarPendentes();
-    setInterval(carregarPendentes, 5000);
-  </script>
 </body>
 </html>
