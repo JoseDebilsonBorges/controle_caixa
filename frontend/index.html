@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caixa - Sistema de Caixa</title>
+  <title>Venda Rápida - Sistema de Vendas</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -28,8 +29,6 @@
       border-right: 1px solid #334155;
       padding: 24px 18px;
       position: fixed;
-      top: 0;
-      left: 0;
       height: 100vh;
     }
 
@@ -37,11 +36,10 @@
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 30px;
-      color: #ffffff;
     }
 
     .logo span {
-      color: #60a5fa;
+      color: #22c55e;
     }
 
     .menu {
@@ -54,477 +52,162 @@
       text-decoration: none;
       color: #e5e7eb;
       background: #1f2937;
-      padding: 14px 16px;
+      padding: 14px;
       border-radius: 12px;
       font-weight: bold;
-      transition: 0.2s;
     }
 
-    .menu a:hover,
-    .menu a.ativo {
-      background: #2563eb;
+    .menu a.ativo,
+    .menu a:hover {
+      background: #22c55e;
       color: white;
     }
 
     .content {
       margin-left: 260px;
-      width: calc(100% - 260px);
       padding: 24px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+      width: 100%;
     }
 
     .topo {
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
-      color: white;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 25px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      color: white;
     }
 
-    .topo h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .topo p {
-      opacity: 0.95;
-    }
-
-    .form-card,
-    .section-card {
+    .card {
       background: #111827;
+      padding: 20px;
+      border-radius: 16px;
       border: 1px solid #334155;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
     }
 
-    .form-card h2,
-    .section-card h2 {
-      margin-bottom: 18px;
-      color: #f8fafc;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 18px;
-    }
-
-    input,
-    select {
+    input, select {
       width: 100%;
-      padding: 12px 14px;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 10px;
       border: 1px solid #475569;
-      border-radius: 12px;
-      outline: none;
-      font-size: 15px;
       background: #0f172a;
-      color: #f8fafc;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #2563eb;
-      background: #111827;
+      color: white;
     }
 
     .btn {
+      margin-top: 12px;
+      padding: 12px;
       border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 14px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-danger {
-      background: #dc2626;
-      color: white;
-      margin-top: 12px;
-    }
-
-    .btn-danger:hover {
-      background: #b91c1c;
-    }
-
-    .btn-delete {
-      background: #6b7280;
-      color: white;
-      margin-top: 12px;
-      margin-left: 8px;
-    }
-
-    .btn-delete:hover {
-      background: #4b5563;
-    }
-
-    .acoes-topo {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .pedidos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-    }
-
-    .pedido-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-    }
-
-    .pedido-card h3 {
-      color: #f8fafc;
-      margin-bottom: 12px;
-      font-size: 20px;
-    }
-
-    .pedido-card p {
-      margin-bottom: 8px;
-      font-size: 14px;
-      line-height: 1.4;
-      color: #cbd5e1;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: 6px;
-    }
-
-    .status-pendente {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-em-preparo {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .status-pronto {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-entregue {
-      background: #e5e7eb;
-      color: #374151;
-    }
-
-    .status-cancelado {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .vazio {
-      color: #94a3b8;
-      font-size: 14px;
-    }
-
-    @media (max-width: 900px) {
-      .app-layout {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid #334155;
-      }
-
-      .content {
-        margin-left: 0;
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .content {
-        padding: 15px;
-      }
-
-      .topo h1 {
-        font-size: 26px;
-      }
+    .pedido {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #1f2937;
     }
   </style>
 </head>
+
 <body>
   <div class="app-layout">
+
     <aside class="sidebar">
       <div class="logo">Caixa<span>Web</span></div>
 
       <nav class="menu">
-        <a href="/" class="ativo">Caixa</a>
-        <a href="/cozinha.html">Cozinha</a>
+        <a href="/" class="ativo">Venda rápida</a>
+        <a href="/caixa-evento.html">Pedidos</a>
+        <a href="/cozinha.html">Produção</a>
         <a href="/dashboard.html">Dashboard</a>
         <a href="/pendentes.html">Pendentes</a>
-        <a href="/eventos.html">Eventos</a>
+        <a href="/eventos.html">Sessões</a>
       </nav>
     </aside>
 
     <main class="content">
-      <div class="container">
-        <div class="topo">
-          <h1>Sistema de Caixa 💰</h1>
-          <p>Controle de pedidos, comandas e histórico</p>
-        </div>
 
-        <div class="form-card">
-          <h2>Novo Pedido</h2>
-
-          <form id="formPedido">
-            <div class="form-grid">
-              <input type="text" id="cliente" placeholder="Nome do cliente" required>
-              <input type="text" id="item" placeholder="Item pedido" required>
-              <input type="number" id="quantidade" placeholder="Quantidade" required>
-              <input type="number" id="valor" placeholder="Valor unitário" step="0.01" required>
-
-              <select id="formaPagamento" required>
-                <option value="">Selecione a forma de pagamento</option>
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão de Débito">Cartão de Débito</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Pendente / Fiado">Pendente / Fiado</option>
-              </select>
-            </div>
-
-           <div class="acoes-topo">
-              <button type="submit" class="btn btn-primary">Cadastrar pedido</button>
-           </div>
-          </form>
-        </div>
-
-        <div class="section-card">
-          <h2>Pedidos em andamento</h2>
-          <div id="listaPedidosAtivos" class="pedidos-grid"></div>
-        </div>
-
-        <div class="section-card">
-          <h2>Histórico de finalizados</h2>
-          <div id="listaPedidosFinalizados" class="pedidos-grid"></div>
-        </div>
+      <div class="topo">
+        <h1>Venda Rápida 💰</h1>
+        <p>Controle suas vendas de forma simples e rápida</p>
       </div>
+
+      <div class="card">
+        <h2>Nova Venda</h2>
+
+        <input id="cliente" placeholder="Cliente">
+        <input id="item" placeholder="Produto">
+
+        <input id="quantidade" type="number" placeholder="Quantidade">
+        <input id="valor" type="number" placeholder="Valor">
+
+        <select id="pagamento">
+          <option value="">Forma de pagamento</option>
+          <option>Dinheiro</option>
+          <option>Pix</option>
+          <option>Cartão</option>
+          <option>Pendente</option>
+        </select>
+
+        <button class="btn" onclick="criarPedido()">Registrar venda</button>
+      </div>
+
+      <div class="card">
+        <h2>Vendas registradas</h2>
+        <div id="lista"></div>
+      </div>
+
     </main>
   </div>
 
-  <script>
-    const API_URL = "https://controle-caixa-bd9p.onrender.com";
+<script>
+const API_URL = "https://controle-caixa-bd9p.onrender.com";
 
-    const formPedido = document.getElementById("formPedido");
-    const listaPedidosAtivos = document.getElementById("listaPedidosAtivos");
-    const listaPedidosFinalizados = document.getElementById("listaPedidosFinalizados");
+async function carregar() {
+  const res = await fetch(`${API_URL}/pedidos`);
+  const dados = await res.json();
 
-    function classeStatus(status) {
-      if (status === "Pendente") return "status status-pendente";
-      if (status === "Em preparo") return "status status-em-preparo";
-      if (status === "Pronto") return "status status-pronto";
-      if (status === "Entregue") return "status status-entregue";
-      if (status === "Cancelado") return "status status-cancelado";
-      return "status";
-    }
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
 
-    function criarCardPedido(pedido, mostrarCancelar = false) {
-      return `
-        <div class="pedido-card">
-          <h3>Comanda #${pedido.comanda}</h3>
-          <p><strong>Cliente:</strong> ${pedido.cliente}</p>
-          <p><strong>Item:</strong> ${pedido.item}</p>
-          <p><strong>Quantidade:</strong> ${pedido.quantidade}</p>
-          <p><strong>Valor unitário:</strong> R$ ${Number(pedido.valor).toFixed(2)}</p>
-          <p><strong>Total:</strong> R$ ${Number(pedido.total).toFixed(2)}</p>
-          <p><strong>Forma de pagamento:</strong> ${pedido.forma_pagamento}</p>
-          <p><strong>Status:</strong> <span class="${classeStatus(pedido.status)}">${pedido.status}</span></p>
+  dados.forEach(p => {
+    lista.innerHTML += `
+      <div class="pedido">
+        ${p.cliente} - ${p.item} (${p.quantidade}) - R$ ${p.total}
+      </div>
+    `;
+  });
+}
 
-          ${mostrarCancelar ? `
-            <button class="btn btn-danger" onclick="cancelarPedido(${pedido.id})">Cancelar pedido</button>
-          ` : ""}
+async function criarPedido() {
+  const cliente = document.getElementById("cliente").value;
+  const item = document.getElementById("item").value;
+  const quantidade = document.getElementById("quantidade").value;
+  const valor = document.getElementById("valor").value;
+  const formaPagamento = document.getElementById("pagamento").value;
 
-          ${pedido.status === "Cancelado" ? `
-            <button class="btn btn-delete" onclick="excluirPedido(${pedido.id})">Excluir pedido</button>
-          ` : ""}
-        </div>
-      `;
-    }
+  await fetch(`${API_URL}/pedidos`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      cliente,
+      item,
+      quantidade,
+      valor,
+      formaPagamento
+    })
+  });
 
-    async function carregarPedidos() {
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos`, {
-          method: "GET",
-          cache: "no-store"
-        });
+  carregar();
+}
 
-        if (!resposta.ok) {
-          throw new Error("Erro ao buscar pedidos");
-        }
-
-        const pedidos = await resposta.json();
-
-        listaPedidosAtivos.innerHTML = "";
-        listaPedidosFinalizados.innerHTML = "";
-
-        if (pedidos.length === 0) {
-          listaPedidosAtivos.innerHTML = '<p class="vazio">Nenhum pedido cadastrado ainda.</p>';
-          listaPedidosFinalizados.innerHTML = '<p class="vazio">Nenhum pedido finalizado ainda.</p>';
-          return;
-        }
-
-        const pedidosAtivos = pedidos.filter(
-          (pedido) => pedido.status !== "Entregue" && pedido.status !== "Cancelado"
-        );
-
-        const pedidosFinalizados = pedidos.filter(
-          (pedido) => pedido.status === "Entregue" || pedido.status === "Cancelado"
-        );
-
-        if (pedidosAtivos.length === 0) {
-          listaPedidosAtivos.innerHTML = '<p class="vazio">Nenhum pedido em andamento.</p>';
-        } else {
-          pedidosAtivos.forEach((pedido) => {
-            listaPedidosAtivos.innerHTML += criarCardPedido(pedido, true);
-          });
-        }
-
-        if (pedidosFinalizados.length === 0) {
-          listaPedidosFinalizados.innerHTML = '<p class="vazio">Nenhum pedido finalizado ainda.</p>';
-        } else {
-          pedidosFinalizados.forEach((pedido) => {
-            listaPedidosFinalizados.innerHTML += criarCardPedido(pedido, false);
-          });
-        }
-      } catch (erro) {
-        listaPedidosAtivos.innerHTML = '<p class="vazio">Erro ao carregar pedidos.</p>';
-        listaPedidosFinalizados.innerHTML = '<p class="vazio">Erro ao carregar pedidos.</p>';
-        console.error("Erro em carregarPedidos:", erro);
-      }
-    }
-
-    async function cancelarPedido(id) {
-      const confirmar = confirm("Deseja realmente cancelar este pedido?");
-      if (!confirmar) return;
-
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos/${id}/cancelar`, {
-          method: "PUT",
-          cache: "no-store"
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-          alert(dados.erro || "Erro ao cancelar pedido.");
-          return;
-        }
-
-        carregarPedidos();
-      } catch (erro) {
-        alert("Erro ao cancelar pedido.");
-        console.error("Erro em cancelarPedido:", erro);
-      }
-    }
-
-    async function excluirPedido(id) {
-      const confirmar = confirm("Deseja realmente excluir este pedido?");
-      if (!confirmar) return;
-
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos/${id}`, {
-          method: "DELETE",
-          cache: "no-store"
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-          alert(dados.erro || "Erro ao excluir pedido.");
-          return;
-        }
-
-        carregarPedidos();
-      } catch (erro) {
-        alert("Erro ao excluir pedido.");
-        console.error("Erro em excluirPedido:", erro);
-      }
-    }
-
-    formPedido.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const cliente = document.getElementById("cliente").value;
-      const item = document.getElementById("item").value;
-      const quantidade = document.getElementById("quantidade").value;
-      const valor = document.getElementById("valor").value;
-      const formaPagamento = document.getElementById("formaPagamento").value;
-
-      try {
-        const resposta = await fetch(`${API_URL}/pedidos`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            cliente,
-            item,
-            quantidade,
-            valor,
-            formaPagamento
-          }),
-          cache: "no-store"
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-          alert(dados.erro || "Erro ao cadastrar pedido.");
-          return;
-        }
-
-        alert("Pedido cadastrado com sucesso.");
-        formPedido.reset();
-        carregarPedidos();
-      } catch (erro) {
-        alert("Erro ao conectar com o servidor.");
-        console.error("Erro em cadastrar pedido:", erro);
-      }
-    });
-
-    setInterval(carregarPedidos, 4000);
-    carregarPedidos();
-  </script>
+carregar();
+</script>
 </body>
 </html>
