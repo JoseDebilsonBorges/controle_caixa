@@ -5,6 +5,7 @@
     { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
     { "source": "/pendentes.html", "destination": "/frontend/pendentes.html" },
     { "source": "/eventos.html", "destination": "/frontend/eventos.html" },
-    { "source": "/caixa-evento.html", "destination": "/frontend/caixa-evento.html" }
+    { "source": "/caixa-evento.html", "destination": "/frontend/caixa-evento.html" },
+    { "source": "/config.js", "destination": "/frontend/config.js" }
   ]
 }

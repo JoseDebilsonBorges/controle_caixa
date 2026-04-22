@@ -123,11 +123,11 @@
 
       <nav class="menu">
         <a href="/" class="ativo">Venda rápida</a>
-        <a href="/caixa-evento.html">Pedidos</a>
-        <a href="/cozinha.html">Produção</a>
+        <a href="/caixa-evento.html" id="menu-pedidos">Pedidos</a>
+        <a href="/cozinha.html" id="menu-producao">Produção</a>
         <a href="/dashboard.html">Dashboard</a>
         <a href="/pendentes.html">Pendentes</a>
-        <a href="/eventos.html">Sessões</a>
+        <a href="/eventos.html" id="menu-sessoes">Sessões</a>
       </nav>
     </aside>
 
@@ -166,8 +166,17 @@
     </main>
   </div>
 
+<script src="/config.js"></script>
 <script>
 const API_URL = "https://controle-caixa-bd9p.onrender.com";
+
+function aplicarModoSistema() {
+  if (MODO_SISTEMA === "simples") {
+    document.getElementById("menu-pedidos").style.display = "none";
+    document.getElementById("menu-producao").style.display = "none";
+    document.getElementById("menu-sessoes").style.display = "none";
+  }
+}
 
 async function carregar() {
   const res = await fetch(`${API_URL}/pedidos`);
@@ -207,6 +216,7 @@ async function criarPedido() {
   carregar();
 }
 
+aplicarModoSistema();
 carregar();
 </script>
 </body>
