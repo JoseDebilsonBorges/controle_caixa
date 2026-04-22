@@ -456,12 +456,13 @@
         alert("Erro ao conectar com o servidor.");
         console.error("Erro em finalizarPedido:", erro);
       }
-      function aplicarModoSistema() {
-        if (MODO_SISTEMA === "simples") {
-        window.location.href = "/";
-  }
-}
     }
+
+    function aplicarModoSistema() {
+    if (MODO_SISTEMA === "simples") {
+      window.location.href = "/";
+    }
+  }
 
     aplicarModoSistema();
     carregarSessoes();
